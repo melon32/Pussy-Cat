@@ -2,6 +2,30 @@ import pygame
 from sys import exit
 from random import randint
 
+class Button():
+    def __init__(self, x,y,image):
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.clicked = False
+
+    def draw(self):
+        action = False
+
+        pos = pygame.mouse.get_pos()
+
+        if self.rect.collidepoint(pos):
+            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+                action = True
+                self.clicked = True
+        if pygame.mouse.get_pressed()[0] == 0:
+            self.clicked = False
+
+        screen.blit(self.image, self.rect) 
+        return action
+
+
 def display_score():
     current_time = int(pygame.time.get_ticks() / 1000) - start_time
     score_surf = test_font.render(f'{current_time}', False,(64,64,64))
@@ -45,13 +69,18 @@ def player_animation():
 
 
 pygame.init()
-screen = pygame.display.set_mode((800, 400))
+screen_width = 800
+screen_height = 400
+screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Pussy Cat')
 clock = pygame.time.Clock()
 test_font = pygame.font.Font('font/Pixeltype.ttf', 40)
+
 game_active = True
 start_time = 0
 score = 0
+main_menu = True
+
 jump_sound = pygame.mixer.Sound('graphics/audio/jump.mp3')
 jump_sound.set_volume(0.5)
 bg_music = pygame.mixer.Sound('graphics/audio/bgmusic1.mp3')
@@ -60,6 +89,8 @@ bg_music.play(loops= -1)
 
 sky_surface = pygame.image.load('graphics/Sky.png').convert()
 ground_surface = pygame.image.load('graphics/ground.png').convert()
+start_image = pygame.image.load('graphics/Buttons/start_btn.png')
+exit_image = pygame.image.load('graphics/Buttons/exit_btn.png').convert()
 
 # score_surf = test_font.render('Score: ', False, 'Black')
 # score_rect = score_surf.get_rect(center = (400,50))
@@ -116,12 +147,16 @@ pygame.time.set_timer(varna_animation_timer, 500)
 balodis_animation_timer = pygame.USEREVENT + 3
 pygame.time.set_timer(balodis_animation_timer, 500)
 
+start_btn = Button(250, 200, start_image)
+exit_btn = Button(450, 200, exit_image)
+
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+        
         
         if game_active:
             if event.type == pygame.KEYDOWN:
@@ -158,25 +193,36 @@ while True:
     if game_active:
         screen.blit(sky_surface,(0,0))
         screen.blit(ground_surface,(0,300))
-        # screen.blit(score_surf, score_rect)
-        score = display_score()
 
-        # varna_rect.x -=5
-        # if varna_rect.right <= 0: varna_rect.left = 800
-        # screen.blit(varna_surf,varna_rect)
+        if main_menu == True:
+            if exit_btn.draw():
+                pygame.quit()
+                exit()
 
-        #player
-        player_grav += 1
-        player_rect.y += player_grav
-        if player_rect.bottom >= 305: player_rect.bottom = 305
-        player_animation()
-        screen.blit(player_surface, player_rect)
+            if start_btn.draw():
+                main_menu = False
 
-        #obstacle movement
-        obstacle_rect_list = obstacle_movement(obstacle_rect_list)
+        else:
 
-        # collisions
-        game_active = collisions(player_rect, obstacle_rect_list)
+            # screen.blit(score_surf, score_rect)
+            score = display_score()
+
+            # varna_rect.x -=5
+            # if varna_rect.right <= 0: varna_rect.left = 800
+            # screen.blit(varna_surf,varna_rect)
+
+            #player
+            player_grav += 1
+            player_rect.y += player_grav
+            if player_rect.bottom >= 305: player_rect.bottom = 305
+            player_animation()
+            screen.blit(player_surface, player_rect)
+
+            #obstacle movement
+            obstacle_rect_list = obstacle_movement(obstacle_rect_list)
+
+            # collisions
+            game_active = collisions(player_rect, obstacle_rect_list)
         
     else:
         screen.fill((50,50,50))
@@ -197,5 +243,3 @@ while True:
 
     pygame.display.update()
     clock.tick(60)
-
-    # 2:50:54
