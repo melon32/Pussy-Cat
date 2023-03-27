@@ -90,7 +90,7 @@ bg_music.play(loops= -1)
 sky_surface = pygame.image.load('graphics/Sky.png').convert()
 ground_surface = pygame.image.load('graphics/ground.png').convert()
 start_image = pygame.image.load('graphics/Buttons/start_btn.png')
-exit_image = pygame.image.load('graphics/Buttons/exit_btn.png').convert()
+exit_image = pygame.image.load('graphics/Buttons/exit_btn.png')
 
 # score_surf = test_font.render('Score: ', False, 'Black')
 # score_rect = score_surf.get_rect(center = (400,50))
