@@ -135,8 +135,11 @@ player_stand_rect = player_stand.get_rect(center = (400, 100))
 game_name = test_font.render('Pussy Cat', False, (255,255,255))
 game_name_rect = game_name.get_rect(center = (400, 200))
 
-game_message = test_font.render('Press space to run', False, (115,0,0))
-game_message_rect = game_message.get_rect(center = (400, 350))
+game_message = test_font.render('Press SPACE to run', False, (115,0,0))
+game_message_rect = game_message.get_rect(center = (400, 320))
+
+game_quit_msg = test_font.render('Press ESC to quit', False, (115,0,0))
+game_quit_msg_rect = game_quit_msg.get_rect(center = (400, 360))
 
 obstacle_timer = pygame.USEREVENT + 1
 pygame.time.set_timer(obstacle_timer, 1400)
@@ -168,6 +171,12 @@ while True:
                 game_active = True
                 
                 start_time = int(pygame.time.get_ticks() / 1000)
+
+        if game_active == False:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    exit()
 
 
         if game_active:
@@ -232,14 +241,16 @@ while True:
         player_grav = 0
 
         score_message = test_font.render(f'SCORE: {score}', False, (255,255,255))
-        score_message_rect = score_message.get_rect(center = (400, 270))
+        score_message_rect = score_message.get_rect(center = (400, 260))
         screen.blit(game_name, game_name_rect)
         screen.blit(game_message, game_message_rect)
+        screen.blit(game_quit_msg, game_quit_msg_rect)
                     
         if score == 0:
             screen.blit(game_message, game_message_rect)
         else:
             screen.blit(score_message, score_message_rect)
+
 
     pygame.display.update()
     clock.tick(60)
