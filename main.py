@@ -179,6 +179,11 @@ while True:
                     pygame.quit()
                     exit()
 
+        if game_active:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    main_menu = True
+
 
         if game_active:
             if event.type == obstacle_timer:
