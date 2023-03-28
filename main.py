@@ -89,6 +89,7 @@ bg_music.play(loops= -1)
 
 sky_surface = pygame.image.load('graphics/Sky.png').convert()
 ground_surface = pygame.image.load('graphics/ground.png').convert()
+title_surface = pygame.image.load('graphics/title.png')
 start_image = pygame.image.load('graphics/Buttons/start_btn.png')
 exit_image = pygame.image.load('graphics/Buttons/exit_btn.png')
 
@@ -204,6 +205,9 @@ while True:
         screen.blit(ground_surface,(0,300))
 
         if main_menu == True:
+
+            screen.blit(title_surface,(150,45))
+
             if exit_btn.draw():
                 pygame.quit()
                 exit()
